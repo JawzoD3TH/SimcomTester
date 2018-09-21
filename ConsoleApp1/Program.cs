@@ -782,20 +782,11 @@ namespace SimcomTester
 
         static void SendCommands(string text)
         {
-            string commands;
-            while (true)
-            {
-                commands = text + '\r';
-                if (commands.ToUpper().StartsWith("EXIT"))
-                {
-                    if (Port != null)
-                        Port.Close();
+            string commands = text + '\r';
+            if (commands.ToUpper().StartsWith("EXIT"))
+                ShutDown();
 
-                    break;
-                }
-
-                Port.WriteLine(commands);
-            }
+            Port.WriteLine(commands);
         }
 
         static void SetPort()
@@ -831,8 +822,8 @@ namespace SimcomTester
                     Port = Read(Ports[0], Baudrate);
                     System.Threading.Thread.Sleep(15000);
                     Console.WriteLine("Enter Command:");
-                    string input = Console.ReadLine().ToUpper();
-                    while (input != "EXIT")
+                    string input = Console.ReadLine();
+                    while (input.ToUpper() != "EXIT")
                     {
                         switch (input)
                         {
@@ -876,6 +867,11 @@ namespace SimcomTester
                 Console.ReadKey();
             }
 
+            ShutDown();
+        }
+
+        static void ShutDown()
+        {
             if (Port != null)
                 Port.Close();
 
