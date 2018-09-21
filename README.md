@@ -8,3 +8,4 @@ SMS
 TEST
 
 Anything else custom you might type get's sent to the unit directly.
+EXIT to quit
