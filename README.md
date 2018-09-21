@@ -10,6 +10,7 @@ TEST
 Anything else custom you might type get's sent to the unit directly.
 
 Remember to Modify these two lines as appropriate:
+
 Port.WriteLine("AT+CMGS=\"[+INTL YOUR NUMBER]\"\r");
 Port.WriteLine("ATD + [+INTL YOUR NUMBER];\r");
 
