@@ -839,7 +839,7 @@ namespace SimcomTester
                             case "SMS":
                                 Port.WriteLine("AT+CMGF=1\r");
                                 System.Threading.Thread.Sleep(320);
-                                Port.WriteLine("AT+CMGS=\"+27825227865\"\r");
+                                Port.WriteLine("AT+CMGS=\"[+INTL YOUR NUMBER]\"\r");
                                 System.Threading.Thread.Sleep(320);
                                 Port.WriteLine("Test Message\r");
                                 System.Threading.Thread.Sleep(320);
@@ -849,7 +849,7 @@ namespace SimcomTester
                                 break;
 
                             case "DIAL":
-                                Port.WriteLine("ATD + +27825227865;\r");
+                                Port.WriteLine("ATD + [+INTL YOUR NUMBER];\r");
                                 break;
 
                             case "TEST":
