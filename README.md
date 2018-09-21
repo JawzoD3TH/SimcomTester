@@ -9,7 +9,7 @@ SMS
 
 TEST
 
-Anything else custom you might type get's sent to the unit directly.
+Anything else custom you might type is sent to the unit directly.
 
 Remember to Modify these two lines as appropriate:
 
