@@ -1,0 +1,202 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO.Ports;
+
+namespace SimcomTester
+{
+    class Program
+    {
+        static SerialPort Port;
+        static int Baudrate = 115200;
+
+        static List<string> Ports = new List<string>();
+        static List<int> Baudrates = new List<int>
+        {
+            110,
+            300,
+            600,
+            1200,
+            2400,
+            4800,
+            9600,
+            14400,
+            19200,
+            28800,
+            38400,
+            56000,
+            57600,
+            115200,
+            128000,
+            153600,
+            230400,
+            256000,
+            460800,
+            921600
+        };
+
+        static SerialPort Read(string port, int baudrate)
+        {
+            SerialPort Port = new SerialPort(port)
+            {
+                BaudRate = baudrate,
+                Parity = Parity.None,
+                StopBits = StopBits.One,
+                DataBits = 8,
+                Handshake = Handshake.None
+            };
+
+            Port.DataReceived += SerialPortDataReceived;
+
+            try { Port.Open(); }
+            catch { Console.WriteLine("Port Already Open!"); }
+
+            return Port;
+        }
+
+        static void SerialPortDataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort port = (SerialPort)sender;
+            string input = "Reply: " + port.ReadExisting();
+            Console.WriteLine(input);
+        }
+
+        static void ListSerialPorts()
+        {
+            Console.Write("Available Serial ports:");
+            foreach (var port in SerialPort.GetPortNames())
+            {
+                Ports.Add(port);
+                Console.Write(" [" + port + ']');
+            }
+
+            Console.WriteLine();
+        }
+
+        static void SetBaudRate()
+        {
+            string input;
+
+            while (true)
+            {
+                Console.Write("Set Baudrate (Optional) : ");
+                input = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(input.Trim()))
+                {
+                    Console.WriteLine($"Baudrate: {Baudrate} [Default]");
+                    break;
+                }
+
+                if (int.TryParse(input, out Baudrate))
+                {
+                    if (Baudrates.Contains(Baudrate))
+                        break;
+                }
+            }
+        }
+
+        static void SendCommands(string text)
+        {
+            string commands;
+            while (true)
+            {
+                commands = text + '\r';
+                if (commands.ToUpper().StartsWith("EXIT"))
+                {
+                    if (Port != null)
+                        Port.Close();
+
+                    break;
+                }
+
+                Port.WriteLine(commands);
+            }
+        }
+
+        static void SetPort()
+        {
+            string port;
+
+            while (true)
+            {
+                Console.Write("Please Enter Port: ");
+                port = Console.ReadLine().ToUpper();
+                if (Ports.Contains(port))
+                    break;
+
+            }
+
+            Console.WriteLine("Ready:");
+            Port = Read(port, Baudrate);
+        }
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Sim900 Tester");
+
+            ListSerialPorts();
+
+            if (Ports.Count != 0)
+            {
+                //SetBaudRate();
+
+                if (Ports.Count == 1)
+                {
+                    Console.WriteLine("Ready:");
+                    Port = Read(Ports[0], Baudrate);
+                    System.Threading.Thread.Sleep(15000);
+                    Console.WriteLine("Enter Command:");
+                    string input = Console.ReadLine().ToUpper();
+                    while (input != "EXIT")
+                    {
+                        switch (input)
+                        {
+                            case "SMS":
+                                Port.WriteLine("AT+CMGF=1\r");
+                                System.Threading.Thread.Sleep(320);
+                                Port.WriteLine("AT+CMGS=\"+27825227865\"\r");
+                                System.Threading.Thread.Sleep(320);
+                                Port.WriteLine("Test Message\r");
+                                System.Threading.Thread.Sleep(320);
+                                Port.WriteLine(((char)26).ToString());
+                                System.Threading.Thread.Sleep(96);
+                                Port.WriteLine("\r");
+                                break;
+
+                            case "DIAL":
+                                Port.WriteLine("ATD + +27825227865;\r");
+                                break;
+
+                            case "TEST":
+                                Port.WriteLine("AT+COPS?\r");
+                                System.Threading.Thread.Sleep(320);
+                                Port.WriteLine("AT+CREG?\r");
+                                break;
+
+                            default:
+                                SendCommands(input);
+                                break;
+                        }
+
+                        input = Console.ReadLine().ToUpper();
+                    }
+                }
+                else SetPort();
+
+                Ports.Clear();
+            }
+            else
+            {
+                Console.WriteLine("No Serial Ports Found! Bye");
+                Console.ReadKey();
+            }
+
+            if (Port != null)
+                Port.Close();
+
+            Baudrates.Clear();
+            Port.Dispose();
+            Environment.Exit(0);
+        }
+    }
+}
