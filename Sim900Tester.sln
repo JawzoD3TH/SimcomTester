@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{1176562B-49BD-4F8E-A0CE-F7E3D237C60A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimcomTester", "ConsoleApp1\SimcomTester.csproj", "{1176562B-49BD-4F8E-A0CE-F7E3D237C60A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
