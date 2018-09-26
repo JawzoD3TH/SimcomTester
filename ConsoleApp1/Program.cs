@@ -820,44 +820,45 @@ namespace SimcomTester
                 {
                     Console.WriteLine("Ready:");
                     Port = Read(Ports[0], Baudrate);
-                    System.Threading.Thread.Sleep(15000);
-                    Console.WriteLine("Enter Command:");
-                    string input = Console.ReadLine();
-                    while (input.ToUpper() != "EXIT")
-                    {
-                        switch (input)
-                        {
-                            case "SMS":
-                                Port.WriteLine("AT+CMGF=1\r");
-                                System.Threading.Thread.Sleep(320);
-                                Port.WriteLine("AT+CMGS=\"[+INTL YOUR NUMBER]\"\r");
-                                System.Threading.Thread.Sleep(320);
-                                Port.WriteLine("Test Message\r");
-                                System.Threading.Thread.Sleep(320);
-                                Port.WriteLine(((char)26).ToString());
-                                System.Threading.Thread.Sleep(96);
-                                Port.WriteLine("\r");
-                                break;
-
-                            case "DIAL":
-                                Port.WriteLine("ATD + [+INTL YOUR NUMBER];\r");
-                                break;
-
-                            case "TEST":
-                                Port.WriteLine("AT+COPS?\r");
-                                System.Threading.Thread.Sleep(320);
-                                Port.WriteLine("AT+CREG?\r");
-                                break;
-
-                            default:
-                                SendCommands(input);
-                                break;
-                        }
-
-                        input = Console.ReadLine().ToUpper();
-                    }
                 }
                 else SetPort();
+
+                System.Threading.Thread.Sleep(15000);
+                Console.WriteLine("Enter Command:");
+                string input = Console.ReadLine();
+                while (input.ToUpper() != "EXIT")
+                {
+                    switch (input)
+                    {
+                        case "SMS":
+                            Port.WriteLine("AT+CMGF=1\r");
+                            System.Threading.Thread.Sleep(320);
+                            Port.WriteLine("AT+CMGS=\"[+INTL YOUR NUMBER]\"\r");
+                            System.Threading.Thread.Sleep(320);
+                            Port.WriteLine("Test Message\r");
+                            System.Threading.Thread.Sleep(320);
+                            Port.WriteLine(((char)26).ToString());
+                            System.Threading.Thread.Sleep(96);
+                            Port.WriteLine("\r");
+                            break;
+
+                        case "DIAL":
+                            Port.WriteLine("ATD + [+INTL YOUR NUMBER];\r");
+                            break;
+
+                        case "TEST":
+                            Port.WriteLine("AT+COPS?\r");
+                            System.Threading.Thread.Sleep(320);
+                            Port.WriteLine("AT+CREG?\r");
+                            break;
+
+                        default:
+                            SendCommands(input);
+                            break;
+                    }
+
+                    input = Console.ReadLine().ToUpper();
+                }
 
                 Ports.Clear();
             }
