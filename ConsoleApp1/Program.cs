@@ -828,7 +828,7 @@ namespace SimcomTester
                 string input = Console.ReadLine();
                 while (input.ToUpper() != "EXIT")
                 {
-                    switch (input)
+                    switch (input.ToUpper())
                     {
                         case "SMS":
                             Port.WriteLine("AT+CMGF=1\r");
@@ -857,7 +857,7 @@ namespace SimcomTester
                             break;
                     }
 
-                    input = Console.ReadLine().ToUpper();
+                    input = Console.ReadLine();
                 }
 
                 Ports.Clear();
