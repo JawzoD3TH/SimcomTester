@@ -831,9 +831,11 @@ namespace SimcomTester
                     switch (input.ToUpper())
                     {
                         case "SMS":
+                            Console.WriteLine("Enter Phone Number in International Format:");
+                            string smsnumber = Console.ReadLine();
                             Port.WriteLine("AT+CMGF=1\r");
                             System.Threading.Thread.Sleep(320);
-                            Port.WriteLine("AT+CMGS=\"[+INTL YOUR NUMBER]\"\r");
+                            Port.WriteLine($"AT+CMGS=\"{smsnumber}\"\r");
                             System.Threading.Thread.Sleep(320);
                             Port.WriteLine("Test Message\r");
                             System.Threading.Thread.Sleep(320);
@@ -843,7 +845,9 @@ namespace SimcomTester
                             break;
 
                         case "DIAL":
-                            Port.WriteLine("ATD + [+INTL YOUR NUMBER];\r");
+                            Console.WriteLine("Enter Phone Number in International Format:");
+                            string dialnumber = Console.ReadLine();
+                            Port.WriteLine($"ATD + {dialnumber};\r");
                             break;
 
                         case "TEST":
